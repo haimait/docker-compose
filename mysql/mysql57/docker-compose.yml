@@ -8,9 +8,9 @@ services:
       - 3306:3306
     privileged: true
     volumes:
-      - $PWD/mysql57/log:/var/log/mysql 
-      - $PWD/mysql57/conf/my.cnf:/etc/mysql/my.cnf
-      - $PWD/mysql57/data:/var/lib/mysql
+      - $PWD/db_data57/log:/var/log/mysql 
+      - $PWD/db_data57/conf/my.cnf:/etc/mysql/my.cnf
+      - $PWD/db_data57/data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: "123456"
       MYSQL_USER: 'haima'
