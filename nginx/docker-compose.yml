@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  nginx:
+    container_name: mynginx
+    image: nginx
+    restart: always
+    ports:
+      - 8080:80
+      - 443:443  
+    privileged: true
+    volumes:
+      - ./nginx:/etc/nginx 
+      - ./nginx/logs:/var/log/nginx 
+      - ./wwwroot:/wwwroot
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - myweb
+
+networks:
+
+  myweb:
+    driver: bridge

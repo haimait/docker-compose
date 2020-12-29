@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  mysql:
+    container_name: mysql57
+    image: mysql:5.7.31
+    restart: always
+    ports:
+      - 3306:3306
+    privileged: true
+    volumes:
+      - $PWD/mysql57/log:/var/log/mysql 
+      - $PWD/mysql57/conf/my.cnf:/etc/mysql/my.cnf
+      - $PWD/mysql57/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_USER: 'haima'
+      MYSQL_PASS: '123456'
+    command: [
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_general_ci',
+        '--max_connections=3000'
+    ]
+    networks:
+      - myweb
+
+networks:
+
+  myweb:
+    driver: bridge

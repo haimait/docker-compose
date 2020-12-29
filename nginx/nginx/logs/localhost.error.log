@@ -1,0 +1,2 @@
+2020/09/10 23:54:35 [error] 27#27: *2 open() "/wwwroot/html/favicon.ico" failed (2: No such file or directory), client: 1.95.200.26, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "182.92.234.23:8080"
+2020/09/10 23:58:38 [error] 27#27: *1 open() "/wwwroot/html/hudson" failed (2: No such file or directory), client: 192.241.236.162, server: localhost, request: "GET /hudson HTTP/1.1", host: "182.92.234.23:8080"
