@@ -1,0 +1,66 @@
+version: '3.8'
+services:
+  es660:
+    image: elasticsearch:6.6.0
+    container_name: elasticsearch
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - ./dockerdata/es660/etc/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./dockerdata/es660/plugins/x-pack-core:/usr/share/elasticsearch/modules/x-pack-core
+      - ./dockerdata/es660/data/:/usr/share/elasticsearch/data
+      - ./dockerdata/es660/backup:/data/backup
+      - ./dockerdata/es660/logs:/usr/share/elasticsearch/logs
+    hostname: es
+    restart: always
+    #network_mode: "bridge"
+    environment:
+      - TZ=Asia/Shanghai    # 更改容器时区为 CST（默认为UTC）
+    networks:
+      - myweb  
+
+  kibana660:
+    image: kibana:6.6.0
+    container_name: kibana
+    ports:
+      - 5601:5601
+    volumes:
+      - ./dockerdata/kibana660/etc/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./dockerdata/kibana660/plugins:/usr/share/kibana/plugins
+      - ./dockerdata/kibana660/logs:/usr/share/kibana/logs
+    hostname: kibana
+    restart: always
+    #network_mode: "bridge"
+    environment:
+      - TZ=Asia/Shanghai    # 更改容器时区为 CST（默认为UTC）
+    networks:
+      - myweb    
+
+  filebeat660:
+    image: elastic/filebeat:6.6.0
+    container_name: filebeat
+    ports: 
+      - 5044:5044
+    volumes:
+      - ./dockerdata/filebeat660/etc/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./dockerdata/filebeat660/data:/usr/share/filebeat/data
+      - ./dockerdata/filebeat660/logs:/usr/share/filebeat/logs
+      - ./dockerdata/filebeat660/tmp:/usr/share/filebeat/tmp
+      - ./logs/nginx:/data/logs/nginx   # 把nginx日志目录挂载到容器内部
+    hostname: filebeat
+    restart: always
+    #network_mode: "bridge"
+    environment:
+      - TZ=Asia/Shanghai    # 更改容器时区为 CST（默认为UTC）
+    networks:
+      - myweb  
+      
+networks:
+
+  myweb:
+    driver: bridge      

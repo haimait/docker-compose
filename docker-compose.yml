@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  nginx:
+    container_name: mynginx
+    image: nginx
+    restart: always
+    ports:
+      - 8080:80
+      - 443:443  
+    privileged: true
+    volumes:
+      - $PWD/nginx/nginx:/etc/nginx 
+      - $PWD/nginx/nginx/logs:/var/log/nginx 
+      - $PWD/nginx/wwwroot:/wwwroot
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - myweb 
+
+  myredis:
+    container_name: myredis
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379
+    privileged: true
+    command: redis-server /etc/redis/redis.conf --appendonly yes
+    volumes:
+      - $PWD/redis/data:/data
+      - $PWD/redis/conf/redis.conf:/etc/redis/redis.conf
+    networks:
+      - myweb
+
+networks:
+
+  myweb:
+    driver: bridge

@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 services:
   zookeeper:
     image: wurstmeister/zookeeper
@@ -6,6 +6,8 @@ services:
       - ./data:/data
     ports:
       - 2181:2181
+    networks:
+      - myweb  
 
   kafka:
     image: wurstmeister/kafka
@@ -23,3 +25,10 @@ services:
       - ./kafka-logs:/kafka
     depends_on:
       - zookeeper
+    networks:
+      - myweb  
+      
+networks:
+
+  myweb:
+    driver: bridge

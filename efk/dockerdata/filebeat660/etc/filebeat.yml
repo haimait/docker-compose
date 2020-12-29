@@ -1,0 +1,48 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - ./logs/nginx/nginx_access_json-1.log  # json格式的nginx日志文件路径
+  json.keys_under_root: true
+  json.overwrite_keys: true
+  json.message_key: log
+  tags: ["nginx-log1"]
+
+- type: log
+  enabled: true
+  paths:
+    - ./logs/nginx/nginx_access_json-2.log  # json格式的nginx日志文件路径
+  json.keys_under_root: true
+  json.overwrite_keys: true
+  json.message_key: log
+  tags: ["nginx-log2"]
+
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+setup.ilm.enabled: false
+setup.template:
+  name: "nginx"
+  pattern: "nginx-*"
+setup.template.overwrite: true
+setup.template.enabled: false
+
+output.elasticsearch:
+  hosts: ["es660:9200"]       # 如果无法正常连接ES，请更换成宿主机docker0网卡的IP
+  indices:
+    - index: "nginx-access-%{+yyyy.MM.dd}"
+      when.contains:
+        tags: "nginx-log1"
+    - index: "nginx-error-%{+yyyy.MM.dd}"
+      when.contains:
+        tags: "nginx-log2"
+  # ES连接认证
+  # username: 'elastic'  
+  # password: 'changeme'
+  
+setup.template.overwrite: false
+setup.template.json.enabled: true
+setup.template.enabled: false
+setup.ilm.enabled: false

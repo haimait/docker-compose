@@ -1,0 +1,7 @@
+cluster.name: es
+node.name: es-01
+bootstrap.memory_lock: true
+network.host: 0.0.0.0
+http.port: 9200
+discovery.type: single-node     # 启动单节点类型
+xpack.security.enabled: false    # 关闭x-pack认证

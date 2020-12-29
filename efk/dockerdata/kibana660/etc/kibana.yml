@@ -1,0 +1,10 @@
+server.port: 5601
+server.host: "0.0.0.0"
+elasticsearch.hosts: ["http://es660:9200"] # 如果无法正常连接ES，请更换成宿主机docker0网卡的IP
+kibana.index: ".kibana"
+logging.dest: /usr/share/kibana/logs/kibana.log
+
+# 连接ES认证配置
+# elasticsearch.username: "kibana"    
+# elasticsearch.password: "123456"
+
