@@ -1,0 +1,54 @@
+version: '3.8'
+services:
+  web:
+    image: httpd
+    ports:
+      - "1080:80" #避免和默认的80端口冲突
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
+        
+  fluentd:
+    build: ./fluentd
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    environment:
+      - TZ=Asia/Shanghai    # 更改容器时区为 CST（默认为UTC）  
+    links:
+      - "elasticsearch"
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      - myweb 
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    environment:
+      - discovery.type=single-node
+      - TZ=Asia/Shanghai    # 更改容器时区为 CST（默认为UTC）
+    expose:
+      - 9200
+    ports:
+      - "9200:9200"
+    networks:
+      - myweb    
+  kibana:
+    image: docker.elastic.co/beats/filebeat:7.3.1
+    links:
+      - "elasticsearch"
+    ports:
+      - "5601:5601"        
+    environment:
+      - TZ=Asia/Shanghai    # 更改容器时区为 CST（默认为UTC）
+    networks:
+      - myweb  
+      
+networks:
+
+  myweb:
+    driver: bridge      
